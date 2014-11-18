@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+
+namespace ajf\PHP4_Constructor_Finder;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+if ($argc <= 1) {
+    die("Try --help." . PHP_EOL);
+}
+
+foreach ($argv as $i => $arg) {
+    // first item is always filename of app
+    if ($i === 0) {
+        continue;
+    }
+    if ($arg[0] === '-') {
+        if ($arg === '--help') {
+            die("Usage:" . PHP_EOL . "    finder <filename>" . PHP_EOL);
+        } else {
+            die("Unknown option $argv[1]" . PHP_EOL);
+        }
+    }
+    $results = scan(file_get_contents($arg));
+    foreach ($results as $result) {
+        echo "Found PHP4 constructor in class \"$result[class]\" in $arg on line $result[line]", PHP_EOL;
+    }
+}

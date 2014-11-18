@@ -1,0 +1,30 @@
+{
+    "name": "ajf/php4_constructor_finder",
+    "description": "Finds PHP4-style constructors",
+    "version": "1.0",
+    "homepage": "https://github.com/TazeTSchnitzel/PHP4_Constructor_Finder",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Andrea Faulds",
+            "email": "ajf@ajf.me",
+            "homepage": "http://ajf.me/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "nikic/php-parser": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.3.*"
+    },
+    "autoload": {
+        "files": [
+            "src/core.php"
+        ]
+    },
+    "bin": [
+        "bin/finder"
+    ]
+}
