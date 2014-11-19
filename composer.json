@@ -22,7 +22,10 @@
     "autoload": {
         "psr-4": {
             "ajf\\PHP4_Constructor_Finder\\": "src"
-        }
+        },
+        "files": [
+            "src/functions.php"
+        ]
     },
     "bin": [
         "bin/finder"

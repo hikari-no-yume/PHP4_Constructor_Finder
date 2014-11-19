@@ -28,7 +28,6 @@ foreach ($argv as $i => $arg) {
         $results = [];
         $directoryIterator = new \RecursiveDirectoryIterator($arg, \RecursiveDirectoryIterator::SKIP_DOTS);
 
-        /** @var \SplFileInfo $file */
         foreach (new \RecursiveIteratorIterator($directoryIterator) as $file) {
             if ('php' !== strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION))) {
                 continue;
@@ -44,19 +43,4 @@ foreach ($argv as $i => $arg) {
     foreach ($results as $file => $result) {
         echo "Found PHP4 constructor in class \"$result[class]\" in $result[file] on line $result[line]", PHP_EOL;
     }
-}
-
-// returns array of arrays like ['class' => 'Foo', 'line' => 27]
-function scan($file) {
-    $code = file_get_contents($file);
-    $parser = new PhpParser\Parser(new PhpParser\Lexer);
-    $stmts = $parser->parse($code);
-
-    $scanner = new Scanner($file);
-
-    $traverser = new PhpParser\NodeTraverser;
-    $traverser->addVisitor($scanner);
-    $traverser->traverse($stmts);
-
-    return $scanner->found;
 }
