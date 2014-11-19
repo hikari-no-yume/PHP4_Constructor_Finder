@@ -4,16 +4,20 @@ namespace ajf\PHP4_Constructor_Finder;
 
 use PhpParser;
 
-require __DIR__ . '/../vendor/autoload.php';
-
 class Scanner extends PhpParser\NodeVisitorAbstract
 {
     private $namespaced = FALSE;
     private $hasConstruct = FALSE;
     private $hasSameName = FALSE;
     private $className = "";
+    private $file = "";
 
     public $found = [];
+
+    public function __construct($file)
+    {
+        $this->file = $file;
+    }
 
     public function enterNode(PhpParser\Node $node) {
         if ($node instanceof PhpParser\Node\Stmt\Namespace_) {
@@ -22,7 +26,7 @@ class Scanner extends PhpParser\NodeVisitorAbstract
         if ($node instanceof PhpParser\Node\Stmt\Class_) {
             $this->hasConstruct = FALSE;
             $this->hasSameName = FALSE;
-            $this->className = $node->name; 
+            $this->className = $node->name;
         }
         if ($node instanceof PhpParser\Node\Stmt\ClassMethod && !$this->namespaced) {
             if (strcasecmp($node->name, "__construct") === 0) {
@@ -38,26 +42,14 @@ class Scanner extends PhpParser\NodeVisitorAbstract
             if (!$this->namespaced && $this->hasSameName && !$this->hasConstruct) {
                 $this->found[] = [
                     'class' => $this->className,
-                    'line' => $node->getLine()
+                    'line' => $node->getLine(),
+                    'file' => $this->file
                 ];
             }
         }
-        if ($node instanceof PhpParser\Node\Namespace_ && !empty($node->getAttribute('stmts')) && $namespaced) {
+
+        if ($node instanceof PhpParser\Node\Namespace_ && !empty($node->getAttribute('stmts')) && $this->namespaced) {
             $this->namespaced = FALSE;
         }
     }
-}
-
-// returns array of arrays like ['class' => 'Foo', 'line' => 27]
-function scan($code) {
-    $parser = new PhpParser\Parser(new PhpParser\Lexer);
-    $stmts = $parser->parse($code);
-   
-    $scanner = new Scanner;
-
-    $traverser = new PhpParser\NodeTraverser;
-    $traverser->addVisitor($scanner);
-    $traverser->traverse($stmts);
-
-    return $scanner->found;
 }

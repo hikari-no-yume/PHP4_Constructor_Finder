@@ -3,6 +3,8 @@
 
 namespace ajf\PHP4_Constructor_Finder;
 
+use PhpParser;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 if ($argc <= 1) {
@@ -21,8 +23,40 @@ foreach ($argv as $i => $arg) {
             die("Unknown option $argv[1]" . PHP_EOL);
         }
     }
-    $results = scan(file_get_contents($arg));
-    foreach ($results as $result) {
-        echo "Found PHP4 constructor in class \"$result[class]\" in $arg on line $result[line]", PHP_EOL;
+
+    if (is_dir($arg)) {
+        $results = [];
+        $directoryIterator = new \RecursiveDirectoryIterator($arg, \RecursiveDirectoryIterator::SKIP_DOTS);
+
+        /** @var \SplFileInfo $file */
+        foreach (new \RecursiveIteratorIterator($directoryIterator) as $file) {
+            if ('php' !== strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION))) {
+                continue;
+            }
+
+            $results = array_merge($results, scan($file->getPathname()));
+        }
+
+    } else {
+        $results = scan($arg);
     }
+
+    foreach ($results as $file => $result) {
+        echo "Found PHP4 constructor in class \"$result[class]\" in $result[file] on line $result[line]", PHP_EOL;
+    }
+}
+
+// returns array of arrays like ['class' => 'Foo', 'line' => 27]
+function scan($file) {
+    $code = file_get_contents($file);
+    $parser = new PhpParser\Parser(new PhpParser\Lexer);
+    $stmts = $parser->parse($code);
+
+    $scanner = new Scanner($file);
+
+    $traverser = new PhpParser\NodeTraverser;
+    $traverser->addVisitor($scanner);
+    $traverser->traverse($stmts);
+
+    return $scanner->found;
 }

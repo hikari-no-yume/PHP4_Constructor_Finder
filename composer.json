@@ -20,9 +20,9 @@
         "phpunit/phpunit": "4.3.*"
     },
     "autoload": {
-        "files": [
-            "src/core.php"
-        ]
+        "psr-4": {
+            "ajf\\PHP4_Constructor_Finder\\": "src"
+        }
     },
     "bin": [
         "bin/finder"
