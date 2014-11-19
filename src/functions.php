@@ -3,13 +3,12 @@
 use ajf\PHP4_Constructor_Finder\Scanner;
 
 // returns array of arrays like ['class' => 'Foo', 'line' => 27]
-function scan($file) {
-    $code = file_get_contents($file);
+function scan($code) {
     $parser = new PhpParser\Parser(new PhpParser\Lexer);
     $stmts = $parser->parse($code);
 
-    $scanner = new Scanner($file);
-
+    $scanner = new Scanner();
+    
     $traverser = new PhpParser\NodeTraverser;
     $traverser->addVisitor($scanner);
     $traverser->traverse($stmts);

@@ -10,14 +10,8 @@ class Scanner extends PhpParser\NodeVisitorAbstract
     private $hasConstruct = FALSE;
     private $hasSameName = FALSE;
     private $className = "";
-    private $file = "";
 
     public $found = [];
-
-    public function __construct($file)
-    {
-        $this->file = $file;
-    }
 
     public function enterNode(PhpParser\Node $node) {
         if ($node instanceof PhpParser\Node\Stmt\Namespace_) {
@@ -42,8 +36,7 @@ class Scanner extends PhpParser\NodeVisitorAbstract
             if (!$this->namespaced && $this->hasSameName && !$this->hasConstruct) {
                 $this->found[] = [
                     'class' => $this->className,
-                    'line' => $node->getLine(),
-                    'file' => $this->file
+                    'line' => $node->getLine()
                 ];
             }
         }

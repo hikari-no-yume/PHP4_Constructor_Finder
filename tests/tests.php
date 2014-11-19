@@ -3,21 +3,52 @@
 class Tests extends PHPUnit_Framework_TestCase
 {
     public function test1() {
-        $file = __DIR__ . '/resources/TestNamespace.php';
+        $file = <<<PHP
+<?php
+
+namespace Foo {
+    class Bar {
+        public function bar() {
+        }
+    }
+}
+namespace Bar {
+    class Bar {
+        public function bar() {
+        }
+    }
+}
+PHP;
 
         $result = scan($file);
         $this->assertEquals($result, []);
     }
 
     public function test2() {
-        $file = __DIR__ . '/resources/TestClass.php';
+        $file = <<<PHP
+<?php
+
+class Bar {
+    public function bar() {
+    }
+}
+PHP;
 
         $result = scan($file);
-        $this->assertEquals($result, [['class' => "Bar", 'line' => 3, 'file' => __DIR__ . '/resources/TestClass.php']]);
+        $this->assertEquals($result, [['class' => "Bar", 'line' => 3]]);
     }
 
     public function test3() {
-        $file = __DIR__ . '/resources/TestConstructor.php';
+        $file = <<<PHP
+<?php
+
+class Bar {
+    public function bar() {
+    }
+    public function __construct() {
+    }
+}
+PHP;
 
         $result = scan($file);
         $this->assertEquals($result, []);
