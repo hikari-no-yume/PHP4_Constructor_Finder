@@ -23,4 +23,6 @@ For development, `composer install` in the checked-out repo. For normal use, `co
 
 Command line usage is `finder file1.php file2.php ...`.
 
+To scan multiple files in a directory `finder /path/to/dir ...`.
+
 Run the tests with `vendor/bin/phpunit --bootstrap vendor/autoload.php src/tests.php`.

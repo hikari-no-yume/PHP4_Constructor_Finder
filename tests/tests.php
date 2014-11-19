@@ -1,7 +1,5 @@
 <?php
 
-use ajf\PHP4_Constructor_Finder as Finder;
-
 class Tests extends PHPUnit_Framework_TestCase
 {
     public function test1() {
@@ -22,7 +20,7 @@ namespace Bar {
 }
 PHP;
 
-        $result = Finder\scan($file);
+        $result = scan($file);
         $this->assertEquals($result, []);
     }
 
@@ -36,7 +34,7 @@ class Bar {
 }
 PHP;
 
-        $result = Finder\scan($file);
+        $result = scan($file);
         $this->assertEquals($result, [['class' => "Bar", 'line' => 3]]);
     }
 
@@ -52,7 +50,7 @@ class Bar {
 }
 PHP;
 
-        $result = Finder\scan($file);
+        $result = scan($file);
         $this->assertEquals($result, []);
     }
 }

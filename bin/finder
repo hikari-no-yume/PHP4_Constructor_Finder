@@ -3,6 +3,8 @@
 
 namespace ajf\PHP4_Constructor_Finder;
 
+use PhpParser;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 if ($argc <= 1) {
@@ -21,8 +23,27 @@ foreach ($argv as $i => $arg) {
             die("Unknown option $argv[1]" . PHP_EOL);
         }
     }
-    $results = scan(file_get_contents($arg));
-    foreach ($results as $result) {
-        echo "Found PHP4 constructor in class \"$result[class]\" in $arg on line $result[line]", PHP_EOL;
+
+    if (is_dir($arg)) {
+        $directoryIterator = new \RecursiveDirectoryIterator($arg, \RecursiveDirectoryIterator::SKIP_DOTS);
+
+        foreach (new \RecursiveIteratorIterator($directoryIterator) as $file) {
+            if ('php' !== strtolower(pathinfo($file->getFilename(), PATHINFO_EXTENSION))) {
+                continue;
+            }
+
+            $results = scan(file_get_contents($file->getPathname()));
+
+            foreach ($results as $result) {
+                echo "Found PHP4 constructor in class \"$result[class]\" in {$file->getPathname()} on line $result[line]", PHP_EOL;
+            }
+        }
+
+    } else {
+        $results = scan(file_get_contents($arg));
+
+        foreach ($results as $result) {
+            echo "Found PHP4 constructor in class \"$result[class]\" in $arg on line $result[line]", PHP_EOL;
+        }
     }
 }
