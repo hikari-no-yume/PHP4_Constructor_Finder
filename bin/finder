@@ -3,7 +3,7 @@
 
 namespace ajf\PHP4_Constructor_Finder;
 
-require __DIR__ . '/../vendor/autoload.php';
+require $GLOBALS['_composer_autoload_path'];
 
 if ($argc <= 1) {
     die("Try --help." . PHP_EOL);
