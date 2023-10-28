@@ -19,7 +19,12 @@ So, Levi Morrison [wrote an RFC to get rid of this](https://wiki.php.net/rfc/rem
 Installation and Usage
 ----------------------
 
-For development, `composer install` in the checked-out repo. For normal use, `composer install -g ajf/PHP4_Constructor_Finder`.
+For contributing to this library, `composer install` in the checked-out repo.
+
+For normal use:
+```console
+composer global require ajf/PHP4_Constructor_Finder
+```
 
 Command line usage is `finder file1.php file2.php ...`.
 
