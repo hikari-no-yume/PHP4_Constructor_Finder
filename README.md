@@ -44,6 +44,13 @@ Found PHP4 constructor in class "webform_exporter_delimited" in sites/all/module
 Found PHP4 constructor in class "webform_exporter_excel" in sites/all/modules/webform/includes/webform.export.inc on line 156
 ```
 
+Example to scan all files containing classes:
+
+```console
+$ grep -rl '<?php' sites/all/modules/ | grep -vi '\.md' | xargs grep -l 'class ' | xargs -n1 finder
+```
+
+
 Contributing
 ============
 
